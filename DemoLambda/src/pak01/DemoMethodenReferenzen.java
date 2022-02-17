@@ -15,7 +15,7 @@ public class DemoMethodenReferenzen {
 		
 		List.of("Eins", "Zwei").forEach(System.out::println);
 		
-		List.of("Eins", "Zwei").forEach(DemoMethodenReferenzen::doStuffWithAString);
+		List.of("Eins", "Zwei").forEach(DemoMethodenReferenzen::doStuffWithAString);     
 	}
 	
 	void foo() {
