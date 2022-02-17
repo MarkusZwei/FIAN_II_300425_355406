@@ -1,5 +1,7 @@
 package musikshop.model.data;
 
+import java.util.Objects;
+
 import musikshop.model.interfaces.Artikel;
 
 public class Musikartikel implements Artikel{
@@ -53,5 +55,25 @@ public class Musikartikel implements Artikel{
 				+ ", preis=" + preis + "]";
 	}
 
+	@Override
+	public int hashCode() {
+		return Objects.hash(artBezeichnung, artName, artikelId, preis);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Musikartikel other = (Musikartikel) obj;
+		return Objects.equals(artBezeichnung, other.artBezeichnung) && Objects.equals(artName, other.artName)
+				&& artikelId == other.artikelId
+				&& Double.doubleToLongBits(preis) == Double.doubleToLongBits(other.preis);
+	}
+	
+	
 	
 }

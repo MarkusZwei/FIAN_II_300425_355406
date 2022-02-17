@@ -20,8 +20,15 @@ public class Warenkorb {
 		this.setWarenkorbItems(new ArrayList<>());
 	}
 	
-	public void fuegeArtikelEin(int anzahl, Artikel artikel) {
+	public void fuegeArtikelEin(Integer anzahl, Artikel artikel) {
 		this.getWarenkorbItems().add(new WarenkorbItem(anzahl, artikel));
 	}
+
+	@Override
+	public String toString() {
+		return "\nWarenkorb:" + warenkorbItems;
+	}
+	
+	
 	
 }

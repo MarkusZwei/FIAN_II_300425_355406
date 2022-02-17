@@ -1,12 +1,15 @@
 package musikshop.controller;
 
 import java.awt.event.ActionEvent;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JButton;
 
 import musikshop.model.MainModel;
 import musikshop.model.interfaces.Artikel;
+import musikshop.view.kasse.KassePanel;
 import musikshop.view.main.MainFrame;
 import musikshop.view.suche.SearchResult;
 
@@ -37,6 +40,7 @@ public class MainController {
 		this.getView().addActionListenerToBtnSuchen(this::changeViewToSearch);
 		this.getView().addActionListenerToBtnWarenkorb(this::changeViewToWarenkorb);
 		this.getView().addActionListenerToBtnKasse(this::changeViewToKasse);
+		this.getView().addActionListenerToBtnAbsenden(this::bestellungErstellen);
 	}
 	
 	private void addActionListenerToSearchResultItems() {
@@ -67,9 +71,23 @@ public class MainController {
 		SearchResult res = (SearchResult)btn.getParent();
 		String artikelName = res.getLblProductName().getText();
 		Integer anzahl = (Integer)res.getSpinner().getValue();
-		this.getMainModel().addItemToCart(artikelName, anzahl);
-		
-		
+		this.getMainModel().addItemToCart(artikelName, anzahl);	
+		this.getView().updateWKView(this.getMainModel().getWarenkorb());
 	}
+	
+	private void bestellungErstellen(ActionEvent e) {
+		var btn = (JButton)e.getSource();
+		var kassepanel = (KassePanel)btn.getParent();
+		Map<String,String> data = new HashMap<>();
+		data.put("vorname", kassepanel.getTxtVorname().getText());
+		data.put("nachname", kassepanel.getTxtNachname().getText());
+		data.put("strasse", kassepanel.getTxtStrasse().getText());
+		data.put("hausnummer", kassepanel.getTxtNr().getText());
+		data.put("plz", kassepanel.getTxtPlz().getText());
+		data.put("ort", kassepanel.getTxtOrt().getText());		
+		this.getMainModel().bestellungAbschicken(data);
+	}
+	
+	
 
 }

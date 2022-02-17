@@ -1,6 +1,7 @@
 package musikshop.view.kasse;
 
 import java.awt.Color;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -189,5 +190,9 @@ public class KassePanel extends JPanel {
 		this.getBtnSendOrder().setBounds(785, 482, 198, 23);
 		add(this.getBtnSendOrder());
 
+	}
+	
+	public void addActionListenerToBtnAbsenden(ActionListener al) {		
+		this.getBtnSendOrder().addActionListener(al);
 	}
 }

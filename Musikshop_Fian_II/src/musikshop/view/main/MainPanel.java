@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
+import musikshop.model.data.Warenkorb;
 import musikshop.model.interfaces.Artikel;
 import musikshop.view.kasse.KassePanel;
 import musikshop.view.suche.SearchResultPanel;
@@ -96,5 +97,13 @@ public class MainPanel extends JPanel {
 
 	public void addActionListenerToSearchResultItems(ActionListener al) {
 		this.getSearchResultPanel().addActionListenerToSearchResultItems(al);
+	}
+
+	public void updateWKView(Warenkorb warenkorb) {
+		this.getWkPanel().updateWKView(warenkorb);		
+	}
+
+	public void addActionListenerToBtnAbsenden(ActionListener al) {
+		this.getKassePanel().addActionListenerToBtnAbsenden(al);		
 	}
 }
