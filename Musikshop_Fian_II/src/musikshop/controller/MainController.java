@@ -5,14 +5,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JSpinner;
+import javax.swing.event.ChangeEvent;
 
 import musikshop.model.MainModel;
 import musikshop.model.interfaces.Artikel;
 import musikshop.view.kasse.KassePanel;
 import musikshop.view.main.MainFrame;
 import musikshop.view.suche.SearchResult;
+import musikshop.view.warenkorb.WarenkorbPanelItem;
 
 public class MainController {
 	private MainFrame view;
@@ -79,6 +81,7 @@ public class MainController {
 		Integer anzahl = (Integer)res.getSpinner().getValue();
 		this.getMainModel().addItemToCart(artikelName, anzahl);	
 		this.getView().updateWKView(this.getMainModel().getWarenkorb());
+		this.getView().addChangeListenerToWarenkorbSpinner(this::aendereAnzahlArtikelImWK);
 	}
 	
 	private void bestellungErstellen(ActionEvent e) {
@@ -94,6 +97,11 @@ public class MainController {
 		this.getMainModel().bestellungAbschicken(data);
 	}
 	
-	
+	private void aendereAnzahlArtikelImWK(ChangeEvent e) {
+		WarenkorbPanelItem panelItem = (WarenkorbPanelItem)((JSpinner)e.getSource()).getParent();
+		this.getMainModel().aendereAnzahlArtikelImWK(panelItem.getLblProductName().getText(), (Integer)((JSpinner)e.getSource()).getValue());
+		this.getView().updateWKView(this.getMainModel().getWarenkorb());
+		this.getView().addChangeListenerToWarenkorbSpinner(this::aendereAnzahlArtikelImWK);
+	}
 
 }

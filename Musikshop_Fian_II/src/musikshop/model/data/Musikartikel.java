@@ -9,7 +9,7 @@ import musikshop.model.interfaces.Artikel;
 public class Musikartikel implements Artikel {
 	private int artikelId;
 	private String artName;
-	private String artBezeichnung;
+	private String artBeschreibung;
 	private double preis;
 	private ImageIcon icon;
 
@@ -29,12 +29,12 @@ public class Musikartikel implements Artikel {
 		this.artName = artName;
 	}
 
-	public String getArtBezeichnung() {
-		return artBezeichnung;
+	public String getArtBeschreibung() {
+		return artBeschreibung;
 	}
 
-	public void setArtBezeichnung(String artBezeichnung) {
-		this.artBezeichnung = artBezeichnung;
+	public void setArtBeschreibung(String artBezeichnung) {
+		this.artBeschreibung = artBezeichnung;
 	}
 
 	public double getPreis() {
@@ -53,30 +53,30 @@ public class Musikartikel implements Artikel {
 		this.icon = icon;
 	}
 
-	public Musikartikel(int artikelId, String artName, String artBezeichnung, double preis) {
+	public Musikartikel(int artikelId, String artName, String artBeschreibung, double preis) {
 		this.setArtikelId(artikelId);
 		this.setArtName(artName);
-		this.setArtBezeichnung(artBezeichnung);
+		this.setArtBeschreibung(artBeschreibung);
 		this.setPreis(preis);
 	}
 	
-	public Musikartikel(ImageIcon icon, int artikelId, String artName, String artBezeichnung, double preis) {
+	public Musikartikel(ImageIcon icon, int artikelId, String artName, String artBeschreibung, double preis) {
 		this.setIcon(icon);
 		this.setArtikelId(artikelId);
 		this.setArtName(artName);
-		this.setArtBezeichnung(artBezeichnung);
+		this.setArtBeschreibung(artBeschreibung);
 		this.setPreis(preis);
 	}
 	
 	@Override
 	public String toString() {
-		return "Artikel [artikelId=" + artikelId + ", artName=" + artName + ", artBezeichnung=" + artBezeichnung
+		return "Artikel [artikelId=" + artikelId + ", artName=" + artName + ", artBezeichnung=" + artBeschreibung
 				+ ", preis=" + preis + "]";
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(artBezeichnung, artName, artikelId, preis);
+		return Objects.hash(artBeschreibung, artName, artikelId, preis);
 	}
 
 	@Override
@@ -88,7 +88,7 @@ public class Musikartikel implements Artikel {
 		if (getClass() != obj.getClass())
 			return false;
 		Musikartikel other = (Musikartikel) obj;
-		return Objects.equals(artBezeichnung, other.artBezeichnung) && Objects.equals(artName, other.artName)
+		return Objects.equals(artBeschreibung, other.artBeschreibung) && Objects.equals(artName, other.artName)
 				&& artikelId == other.artikelId
 				&& Double.doubleToLongBits(preis) == Double.doubleToLongBits(other.preis);
 	}

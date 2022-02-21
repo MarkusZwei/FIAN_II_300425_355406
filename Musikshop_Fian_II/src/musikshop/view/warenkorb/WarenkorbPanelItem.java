@@ -2,14 +2,18 @@ package musikshop.view.warenkorb;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.util.List;
 
 import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 
-public class WarenkorbItem extends JPanel {
+import musikshop.model.data.WarenkorbItem;
+
+public class WarenkorbPanelItem extends JPanel {
 	private JLabel lblProductPicture;
 	private JButton btnEntfernen;
 	private JLabel lblProductName;
@@ -74,11 +78,11 @@ public class WarenkorbItem extends JPanel {
 		this.lblGesamtPreis = lblGesamtPreis;
 	}
 
-	public WarenkorbItem() {
+	public WarenkorbPanelItem() {
 		setPreferredSize(new Dimension(980, 165));
 		setLayout(null);
 
-		this.setLblProductPicture(new JLabel("New label"));
+		this.setLblProductPicture(new JLabel());
 		this.getLblProductPicture().setBackground(Color.ORANGE);
 		this.getLblProductPicture().setOpaque(true);
 		this.getLblProductPicture().setBounds(10, 11, 151, 103);
@@ -100,8 +104,9 @@ public class WarenkorbItem extends JPanel {
 		this.getLblProductText().setBounds(171, 45, 622, 96);
 		add(this.getLblProductText());
 
-		this.setSpinner(new JSpinner());
-		this.getSpinner().setBounds(843, 45, 61, 23);
+		SpinnerNumberModel model = new SpinnerNumberModel(0, 0, 100, 1);
+		this.setSpinner(new JSpinner(model));
+		this.getSpinner().setBounds(843, 45, 50, 23);
 		add(this.getSpinner());
 
 		this.setLblEinzelpreis(new JLabel("Einzelpreis"));
@@ -116,20 +121,31 @@ public class WarenkorbItem extends JPanel {
 		this.getLblGesamtPreis().setBounds(803, 118, 143, 23);
 		add(this.getLblGesamtPreis());
 	}
-	
-	public WarenkorbItem(String pictureText, String productName, String productText, double einzelpreis) {
+
+	public WarenkorbPanelItem(String pictureText, String productName, String productText, double einzelpreis) {
 		this();
 		this.getLblProductPicture().setText(pictureText);
 		this.getLblProductName().setText(productName);
 		this.getLblProductText().setText(productText);
-		this.getLblEinzelpreis().setText(""+einzelpreis);
+		this.getLblEinzelpreis().setText("" + einzelpreis);
 	}
-	public WarenkorbItem(Icon icon, String productName, String productText, double einzelpreis) {
+
+	public WarenkorbPanelItem(Icon icon, String productName, String productText, double einzelpreis) {
 		this();
 		this.getLblProductPicture().setIcon(icon);
 		this.getLblProductName().setText(productName);
 		this.getLblProductText().setText(productText);
-		this.getLblEinzelpreis().setText(""+einzelpreis);
+		this.getLblEinzelpreis().setText("" + einzelpreis);
 	}
-	
+
+	public WarenkorbPanelItem(WarenkorbItem item) {
+		this();
+		this.getLblProductPicture().setIcon(item.getArtikel().getIcon());
+		this.getLblProductName().setText(item.getArtikel().getArtName());
+		this.getLblProductText().setText(item.getArtikel().getArtBeschreibung());
+		this.getLblEinzelpreis().setText("" + item.getArtikel().getPreis());
+		this.getLblGesamtPreis().setText("" + item.getAnzahl() * item.getArtikel().getPreis());
+		this.getSpinner().setValue(item.getAnzahl());
+	}
+
 }

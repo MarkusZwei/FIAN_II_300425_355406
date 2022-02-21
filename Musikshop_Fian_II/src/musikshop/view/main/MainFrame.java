@@ -4,6 +4,10 @@ import java.awt.event.ActionListener;
 import java.util.List;
 
 import javax.swing.JFrame;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import musikshop.model.data.Warenkorb;
 import musikshop.model.interfaces.Artikel;
@@ -32,7 +36,11 @@ public class MainFrame extends JFrame {
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setMainPanel(new MainPanel());
 		this.setContentPane(this.getMainPanel());
-
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
 		this.setVisible(true);
 	}
 
@@ -76,5 +84,9 @@ public class MainFrame extends JFrame {
 
 	public void addActionListenerToBtnAbsenden(ActionListener al) {
 		this.getMainPanel().addActionListenerToBtnAbsenden(al);
+	}
+
+	public void addChangeListenerToWarenkorbSpinner(ChangeListener al) {
+		this.getMainPanel().addChangeListenerToWarenkorbSpinner(al);		
 	}
 }

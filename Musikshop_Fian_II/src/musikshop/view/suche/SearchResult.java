@@ -16,6 +16,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.BevelBorder;
 import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 
 public class SearchResult extends JPanel {
 	private JLabel lblProductPicture;
@@ -112,8 +113,9 @@ public class SearchResult extends JPanel {
 		this.getLblPreis().setBounds(812, 48, 46, 14);
 		add(this.getLblPreis());
 
-		this.setSpinner(new JSpinner());
-		this.getSpinner().setBounds(907, 27, 30, 20);
+		SpinnerNumberModel model = new SpinnerNumberModel(0, 0, 100, 1);
+		this.setSpinner(new JSpinner(model));
+		this.getSpinner().setBounds(907, 27, 50, 20);
 		add(this.getSpinner());
 		
 	}

@@ -21,6 +21,7 @@ import musikshop.model.data.Kunde;
 import musikshop.model.data.Musikartikel;
 import musikshop.model.data.Sortiment;
 import musikshop.model.data.Warenkorb;
+import musikshop.model.data.WarenkorbItem;
 import musikshop.model.interfaces.Artikel;
 import musikshop.model.interfaces.DBConnection;
 
@@ -68,10 +69,9 @@ public class MainModel {
 		this.setSortiment(new Sortiment());
 		this.setWarenkorb(new Warenkorb());
 
-		
 //		this.ladeSortiment();
 		this.ladeSortimentMitBildern();
-		
+
 	}
 
 	private void ladeSortiment() {
@@ -90,14 +90,14 @@ public class MainModel {
 		try {
 			ResultSet res = this.getDbConnection().getAllArticlesWithPictures();
 			while (res.next()) {
-				this.getSortiment().getAlleArtikel()
-						.add(new Musikartikel(this.decodeImage(res.getString("bild")),res.getInt(1), res.getString(2), res.getString(3), res.getDouble(4)));
+				this.getSortiment().getAlleArtikel().add(new Musikartikel(this.decodeImage(res.getString("bild")),
+						res.getInt(1), res.getString(2), res.getString(3), res.getDouble(4)));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public List<Artikel> getSortimentAsList() {
 		return new ArrayList<>(this.getSortiment().getAlleArtikel());
 	}
@@ -113,6 +113,30 @@ public class MainModel {
 		}
 	}
 
+	public void aendereAnzahlArtikelImWK(String artikelname, Integer spinnerValue) {
+//		System.out.println("artikelname: " + artikelname);
+//		System.out.println("spinnerValue: " + spinnerValue);
+		for (WarenkorbItem item : this.getWarenkorb().getWarenkorbItems()) {
+			if (artikelname.equals(item.getArtikel().getArtName())) {
+				if (item.getAnzahl() < spinnerValue) {
+					item.setAnzahl(item.getAnzahl() + (spinnerValue - item.getAnzahl()));
+				} else {
+					item.setAnzahl(spinnerValue);
+				}
+			}
+		}
+		this.getWarenkorb().getWarenkorbItems().removeIf(item->item.getAnzahl() == 0);
+//		System.out.println("Laenge des WK: " +this.getWarenkorb().getWarenkorbItems().size());
+//		this.getWarenkorb().getWarenkorbItems().stream()
+//				.filter(item -> item.getArtikel().getArtName().equals(artikelname)).forEach(wkItem -> {
+//					if (wkItem.getAnzahl() < spinnerValue) {
+//						wkItem.setAnzahl(wkItem.getAnzahl() + (spinnerValue - wkItem.getAnzahl()));
+//					} else {
+//						wkItem.setAnzahl(spinnerValue);
+//					}
+//				});
+	}
+
 	public void bestellungAbschicken(Map<String, String> data) {
 		Bestellung bestellung = new Bestellung(new Kunde(data.get("vorname"), data.get("nachname"), data.get("strasse"),
 				data.get("hausnummer"), data.get("plz"), data.get("ort")), this.getWarenkorb());
@@ -121,24 +145,23 @@ public class MainModel {
 
 	public String encodeImage(String imageName) {
 		try {
-			byte[] originalBytes = Files.readAllBytes(Paths.get(this.getClass().getResource("/"+imageName).toURI()));
+			byte[] originalBytes = Files.readAllBytes(Paths.get(this.getClass().getResource("/" + imageName).toURI()));
 			byte[] encoded = Base64.getEncoder().encode(originalBytes);
 			String encodeString = new String(encoded);
 			return encodeString;
-		} catch (Exception e) {			
+		} catch (Exception e) {
 			e.printStackTrace();
-		} 
+		}
 		return null;
 	}
-	
+
 	public ImageIcon decodeImage(String encodedImage) {
 		byte[] decoded = Base64.getDecoder().decode(encodedImage);
 		ImageIcon iIcon = new ImageIcon(decoded);
 		ImageIcon iIconScaled = new ImageIcon(iIcon.getImage().getScaledInstance(115, 106, 0));
 		return iIconScaled;
 	}
-	
-	
+
 	public ImageIcon getPicture() {
 		try {
 			byte[] originalBytes = Files.readAllBytes(Paths.get(this.getClass().getResource("/schadel.png").toURI()));
@@ -146,10 +169,10 @@ public class MainModel {
 			byte[] encoded = Base64.getEncoder().encode(originalBytes);
 			System.out.println(encoded.length);
 			System.out.println(new String(encoded).length());
-			
+
 			byte[] decoded = Base64.getDecoder().decode(encoded);
 			System.out.println(decoded.length);
-			
+
 			ImageIcon iIcon = new ImageIcon(decoded);
 			ImageIcon iIconScaled = new ImageIcon(iIcon.getImage().getScaledInstance(115, 106, 0));
 			return iIconScaled;
@@ -176,12 +199,6 @@ public class MainModel {
 //			
 //			e.printStackTrace();
 //		}
-		
-		
-		
-		
-		
-		
 
 	}
 }

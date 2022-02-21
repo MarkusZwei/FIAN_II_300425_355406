@@ -11,9 +11,9 @@ public interface Artikel {
 
 	void setArtName(String artikelName);
 
-	String getArtBezeichnung();
+	String getArtBeschreibung();
 
-	void setArtBezeichnung(String artBezeichnung);
+	void setArtBeschreibung(String artBeschreibung);
 
 	double getPreis();
 

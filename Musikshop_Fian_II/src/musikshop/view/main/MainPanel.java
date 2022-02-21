@@ -4,6 +4,7 @@ import java.awt.event.ActionListener;
 import java.util.List;
 
 import javax.swing.JPanel;
+import javax.swing.event.ChangeListener;
 
 import musikshop.model.data.Warenkorb;
 import musikshop.model.interfaces.Artikel;
@@ -105,5 +106,10 @@ public class MainPanel extends JPanel {
 
 	public void addActionListenerToBtnAbsenden(ActionListener al) {
 		this.getKassePanel().addActionListenerToBtnAbsenden(al);		
+	}
+
+	public void addChangeListenerToWarenkorbSpinner(ChangeListener al) {
+		this.getWkPanel().addChangeListenerToWarenkorbSpinner(al);
+		
 	}
 }
