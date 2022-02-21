@@ -2,13 +2,16 @@ package musikshop.model.data;
 
 import java.util.Objects;
 
+import javax.swing.ImageIcon;
+
 import musikshop.model.interfaces.Artikel;
 
-public class Musikartikel implements Artikel{
+public class Musikartikel implements Artikel {
 	private int artikelId;
 	private String artName;
 	private String artBezeichnung;
 	private double preis;
+	private ImageIcon icon;
 
 	public int getArtikelId() {
 		return artikelId;
@@ -42,7 +45,23 @@ public class Musikartikel implements Artikel{
 		this.preis = preis;
 	}
 
+	public ImageIcon getIcon() {
+		return icon;
+	}
+
+	public void setIcon(ImageIcon icon) {
+		this.icon = icon;
+	}
+
 	public Musikartikel(int artikelId, String artName, String artBezeichnung, double preis) {
+		this.setArtikelId(artikelId);
+		this.setArtName(artName);
+		this.setArtBezeichnung(artBezeichnung);
+		this.setPreis(preis);
+	}
+	
+	public Musikartikel(ImageIcon icon, int artikelId, String artName, String artBezeichnung, double preis) {
+		this.setIcon(icon);
 		this.setArtikelId(artikelId);
 		this.setArtName(artName);
 		this.setArtBezeichnung(artBezeichnung);
@@ -73,7 +92,5 @@ public class Musikartikel implements Artikel{
 				&& artikelId == other.artikelId
 				&& Double.doubleToLongBits(preis) == Double.doubleToLongBits(other.preis);
 	}
-	
-	
-	
+
 }

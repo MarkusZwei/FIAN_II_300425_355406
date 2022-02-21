@@ -8,6 +8,7 @@ import java.awt.Insets;
 import java.awt.SystemColor;
 
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -132,6 +133,14 @@ public class SearchResult extends JPanel {
 	public SearchResult(String pictureText, String productText, String productName, double preis) {
 		this();
 		this.getLblProductPicture().setText(pictureText);
+		this.getLblProductText().setText(productText);
+		this.getLblProductName().setText(productName);
+		this.getLblPreis().setText("" + preis);
+	}
+	
+	public SearchResult(Icon icon, String productText, String productName, double preis) {
+		this();
+		this.getLblProductPicture().setIcon(icon);
 		this.getLblProductText().setText(productText);
 		this.getLblProductName().setText(productName);
 		this.getLblPreis().setText("" + preis);

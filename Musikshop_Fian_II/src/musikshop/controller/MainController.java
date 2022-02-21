@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 import musikshop.model.MainModel;
@@ -64,6 +65,11 @@ public class MainController {
 		List<Artikel> list = this.getMainModel().getSortimentAsList();
 		this.getView().displaySearchResults(list);
 		this.addActionListenerToSearchResultItems();
+		
+		//-------------- Nur zum Testen ----------------
+//		ImageIcon icon = this.getMainModel().getPicture();
+//		this.getView().getMainPanel().getSearchResultPanel().getResults().get(0).getLblProductPicture().setIcon(icon);
+		
 	}
 		
 	private void addArtikelToWarenkorb(ActionEvent e) {

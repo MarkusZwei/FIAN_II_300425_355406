@@ -1,11 +1,19 @@
 package musikshop.model;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+
+import javax.swing.ImageIcon;
 
 import musikshop.model.crud.SQLiteConnection;
 import musikshop.model.data.Bestellung;
@@ -58,8 +66,12 @@ public class MainModel {
 		this.setDbConnection(new SQLiteConnection());
 		this.setArtList(new ArrayList<>());
 		this.setSortiment(new Sortiment());
-		this.ladeSortiment();
 		this.setWarenkorb(new Warenkorb());
+
+		
+//		this.ladeSortiment();
+		this.ladeSortimentMitBildern();
+		
 	}
 
 	private void ladeSortiment() {
@@ -74,6 +86,18 @@ public class MainModel {
 		}
 	}
 
+	private void ladeSortimentMitBildern() {
+		try {
+			ResultSet res = this.getDbConnection().getAllArticlesWithPictures();
+			while (res.next()) {
+				this.getSortiment().getAlleArtikel()
+						.add(new Musikartikel(this.decodeImage(res.getString("bild")),res.getInt(1), res.getString(2), res.getString(3), res.getDouble(4)));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public List<Artikel> getSortimentAsList() {
 		return new ArrayList<>(this.getSortiment().getAlleArtikel());
 	}
@@ -95,4 +119,69 @@ public class MainModel {
 		System.out.println(bestellung);
 	}
 
+	public String encodeImage(String imageName) {
+		try {
+			byte[] originalBytes = Files.readAllBytes(Paths.get(this.getClass().getResource("/"+imageName).toURI()));
+			byte[] encoded = Base64.getEncoder().encode(originalBytes);
+			String encodeString = new String(encoded);
+			return encodeString;
+		} catch (Exception e) {			
+			e.printStackTrace();
+		} 
+		return null;
+	}
+	
+	public ImageIcon decodeImage(String encodedImage) {
+		byte[] decoded = Base64.getDecoder().decode(encodedImage);
+		ImageIcon iIcon = new ImageIcon(decoded);
+		ImageIcon iIconScaled = new ImageIcon(iIcon.getImage().getScaledInstance(115, 106, 0));
+		return iIconScaled;
+	}
+	
+	
+	public ImageIcon getPicture() {
+		try {
+			byte[] originalBytes = Files.readAllBytes(Paths.get(this.getClass().getResource("/schadel.png").toURI()));
+			System.out.println(originalBytes.length);
+			byte[] encoded = Base64.getEncoder().encode(originalBytes);
+			System.out.println(encoded.length);
+			System.out.println(new String(encoded).length());
+			
+			byte[] decoded = Base64.getDecoder().decode(encoded);
+			System.out.println(decoded.length);
+			
+			ImageIcon iIcon = new ImageIcon(decoded);
+			ImageIcon iIconScaled = new ImageIcon(iIcon.getImage().getScaledInstance(115, 106, 0));
+			return iIconScaled;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	public static void main(String[] args) {
+		MainModel m = new MainModel();
+//		String encoded1 = m.encodeImage("bass.png");
+//		String encoded2 = m.encodeImage("elektrischer-bass.png");
+//		String encoded3 = m.encodeImage("rocknroll.png");
+//		String encoded4 = m.encodeImage("schadel.png");
+//		
+//		try {
+//			m.getDbConnection().addImageToDB(encoded1, 1);
+//			m.getDbConnection().addImageToDB(encoded2, 2);
+//			m.getDbConnection().addImageToDB(encoded3, 3);
+//			m.getDbConnection().addImageToDB(encoded4, 4);
+//		} catch (Exception e) {
+//			
+//			e.printStackTrace();
+//		}
+		
+		
+		
+		
+		
+		
+
+	}
 }

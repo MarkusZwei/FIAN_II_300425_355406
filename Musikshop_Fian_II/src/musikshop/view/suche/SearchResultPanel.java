@@ -61,16 +61,25 @@ public class SearchResultPanel extends JPanel {
 
 	}
 
+//	public void displaySearchResults(List<Artikel> list) {
+//		this.getResults().clear();
+//		list.forEach((Artikel a) -> this.getResults().add(
+//				new SearchResult("Bild " + a.getArtikelId(), a.getArtBezeichnung(), a.getArtName(), a.getPreis())));
+//		this.getResultDisplayPanel().removeAll();
+//		this.getResultDisplayPanel().setLayout(new GridLayout(this.getResults().size(), 0));
+//		this.getResults().forEach((SearchResult res) -> this.getResultDisplayPanel().add(res));
+//		this.repaint();
+//	}
+	
 	public void displaySearchResults(List<Artikel> list) {
 		this.getResults().clear();
 		list.forEach((Artikel a) -> this.getResults().add(
-				new SearchResult("Bild " + a.getArtikelId(), a.getArtBezeichnung(), a.getArtName(), a.getPreis())));
+				new SearchResult(a.getIcon(), a.getArtBezeichnung(), a.getArtName(), a.getPreis())));
 		this.getResultDisplayPanel().removeAll();
 		this.getResultDisplayPanel().setLayout(new GridLayout(this.getResults().size(), 0));
 		this.getResults().forEach((SearchResult res) -> this.getResultDisplayPanel().add(res));
 		this.repaint();
 	}
-	
 	public void addActionListenerToSearchResultItems(ActionListener al) {
 		this.getResults().forEach(r->r.getBtnWarenkorb().addActionListener(al));
 	}

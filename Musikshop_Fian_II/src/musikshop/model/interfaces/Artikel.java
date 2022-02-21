@@ -1,5 +1,7 @@
 package musikshop.model.interfaces;
 
+import javax.swing.ImageIcon;
+
 public interface Artikel {
 	public abstract int getArtikelId();
 
@@ -16,4 +18,8 @@ public interface Artikel {
 	double getPreis();
 
 	void setPreis(double preis);
+	
+	ImageIcon getIcon();
+	
+	void setIcon(ImageIcon icon);
 }
