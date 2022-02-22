@@ -6,7 +6,7 @@ import javax.swing.ImageIcon;
 
 import musikshop.model.interfaces.Artikel;
 
-public class Musikartikel implements Artikel {
+public class Musikartikel implements Artikel {	
 	private int artikelId;
 	private String artName;
 	private String artBeschreibung;

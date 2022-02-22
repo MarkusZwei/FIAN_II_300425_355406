@@ -1,7 +1,5 @@
 package musikshop.view.warenkorb;
 
-import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -83,21 +81,19 @@ public class WarenkorbPanel extends JPanel {
 
 	public void updateWKView(Warenkorb warenkorb) {
 		this.getCartItems().clear();
+		warenkorb.getWarenkorbItems().forEach(item -> this.getCartItems().add(new WarenkorbPanelItem(item)));
 		System.out.println("Aktualisiere WK Panel");
 		System.out.println("Anzahl CartItems: " + this.getCartItems().size());
 		System.out.println("Anzahl Wk Items: " + warenkorb.getWarenkorbItems().size());
-		warenkorb.getWarenkorbItems().forEach(item -> this.getCartItems().add(new WarenkorbPanelItem(item)));
 		this.getCartPanel().removeAll();
-		this.getCartPanel().setLayout(new GridLayout(this.getCartItems().size(), 0));
-		this.getCartItems().forEach(item -> this.getCartPanel().add(item));
-		
-		//toDo Fehler beheben leeres Cart
-		if (this.getCartItems().size() == 0) {
-			this.setCartPanel(new JPanel());
-			this.getScrollPane().setViewportView(this.getCartPanel());
+		if(this.getCartItems().size()>0) {
+			this.getCartPanel().setLayout(new GridLayout(this.getCartItems().size(), 0));			
+		}else {
+			this.getCartPanel().setLayout(new GridLayout(1, 0));
 		}
-		this.getCartPanel().revalidate();
-		this.getCartPanel().repaint();
+		this.getCartItems().forEach(item -> this.getCartPanel().add(item));
+		this.getScrollPane().revalidate();
+		this.getScrollPane().repaint();
 	}
 
 	public void addChangeListenerToWarenkorbSpinner(ChangeListener e) {
