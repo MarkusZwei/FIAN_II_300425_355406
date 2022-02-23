@@ -1,19 +1,30 @@
 package musikshop.model;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Base64;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
 import javax.swing.ImageIcon;
+import javax.xml.XMLConstants;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.CollectionType;
 
 import musikshop.model.crud.SQLiteConnection;
 import musikshop.model.data.Bestellung;
@@ -71,7 +82,8 @@ public class MainModel {
 
 //		this.ladeSortiment();
 		this.ladeSortimentMitBildern();
-
+		this.getXMLSortiment();
+		this.getJsonSortiment();
 	}
 
 	private void ladeSortiment() {
@@ -114,8 +126,6 @@ public class MainModel {
 	}
 
 	public void aendereAnzahlArtikelImWK(String artikelname, Integer spinnerValue) {
-//		System.out.println("artikelname: " + artikelname);
-//		System.out.println("spinnerValue: " + spinnerValue);
 		for (WarenkorbItem item : this.getWarenkorb().getWarenkorbItems()) {
 			if (artikelname.equals(item.getArtikel().getArtName())) {
 				if (item.getAnzahl() < spinnerValue) {
@@ -126,15 +136,6 @@ public class MainModel {
 			}
 		}
 		this.getWarenkorb().getWarenkorbItems().removeIf(item->item.getAnzahl() == 0);
-//		System.out.println("Laenge des WK: " +this.getWarenkorb().getWarenkorbItems().size());
-//		this.getWarenkorb().getWarenkorbItems().stream()
-//				.filter(item -> item.getArtikel().getArtName().equals(artikelname)).forEach(wkItem -> {
-//					if (wkItem.getAnzahl() < spinnerValue) {
-//						wkItem.setAnzahl(wkItem.getAnzahl() + (spinnerValue - wkItem.getAnzahl()));
-//					} else {
-//						wkItem.setAnzahl(spinnerValue);
-//					}
-//				});
 	}
 
 	public void bestellungAbschicken(Map<String, String> data) {
@@ -182,23 +183,67 @@ public class MainModel {
 
 		return null;
 	}
-
+	
+	public void getXMLSortiment() {
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newDefaultInstance();
+		try {
+			dbf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+			DocumentBuilder db = dbf.newDocumentBuilder();
+			Document doc = db.parse(this.getClass().getResourceAsStream("/sortiment.xml"));
+			doc.getDocumentElement().normalize();
+			NodeList list = doc.getElementsByTagName("artikel");
+			
+			for (int i = 0; i < list.getLength(); i++) {
+				Node node = list.item(i);
+				if(node.getNodeType() == Node.ELEMENT_NODE) {
+					Element element = (Element)node;
+					String id = element.getAttribute("id");
+					String name = element.getElementsByTagName("name").item(0).getTextContent();
+					String iconBase64 = element.getElementsByTagName("icon").item(0).getTextContent();
+					ImageIcon icon = this.decodeImage(iconBase64);
+					String beschreibung = element.getElementsByTagName("beschreibung").item(0).getTextContent();
+					String preis = element.getElementsByTagName("preis").item(0).getTextContent();
+					Artikel a = new Musikartikel(icon, Integer.parseInt(id), name, beschreibung, Double.parseDouble(preis));
+					this.getSortiment().getAlleArtikel().add(a);					
+				}
+			}			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
+	}
+	
+	private void getJsonSortiment() {
+		try {
+			FileReader fr = new FileReader("./resources/sortiment.json");
+			BufferedReader br = new BufferedReader(fr);
+			StringBuilder sb = new StringBuilder();
+			while(br.ready()) {
+				sb.append(br.readLine());
+			}
+			String json = sb.toString();
+			ObjectMapper objectMapper = new ObjectMapper();
+			CollectionType listType = objectMapper.getTypeFactory().constructCollectionType(List.class, LinkedHashMap.class);
+			List<LinkedHashMap<Object, Object>> asList = objectMapper.readValue(json, listType);
+			for (int i = 0; i < asList.size(); i++) {
+				int id = Integer.parseInt(asList.get(i).get("id").toString());
+				String iconEncoded = asList.get(i).get("icon").toString();
+				ImageIcon icon = this.decodeImage(iconEncoded);
+				String name = asList.get(i).get("name").toString();
+				String beschreibung = asList.get(i).get("beschreibung").toString();
+				double preis = Double.parseDouble(asList.get(i).get("preis").toString());
+				Artikel a = new Musikartikel(icon, id, name, beschreibung, preis);
+//				System.out.println(a);
+				this.getSortiment().getAlleArtikel().add(a);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public static void main(String[] args) {
 		MainModel m = new MainModel();
-//		String encoded1 = m.encodeImage("bass.png");
-//		String encoded2 = m.encodeImage("elektrischer-bass.png");
-//		String encoded3 = m.encodeImage("rocknroll.png");
-//		String encoded4 = m.encodeImage("schadel.png");
-//		
-//		try {
-//			m.getDbConnection().addImageToDB(encoded1, 1);
-//			m.getDbConnection().addImageToDB(encoded2, 2);
-//			m.getDbConnection().addImageToDB(encoded3, 3);
-//			m.getDbConnection().addImageToDB(encoded4, 4);
-//		} catch (Exception e) {
-//			
-//			e.printStackTrace();
-//		}
+		m.getJsonSortiment();
 
 	}
 }

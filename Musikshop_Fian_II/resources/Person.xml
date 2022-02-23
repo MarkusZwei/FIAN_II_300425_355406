@@ -1,0 +1,17 @@
+<Personen>
+	<Person>
+		<id bla = "bla">1</id>
+		<vorname>Markus</vorname>
+		<nachname>Szyska</nachname>
+	</Person>
+	<Person>
+		<id>2</id>
+		<vorname>Christian</vorname>
+		<nachname>Schirmer</nachname>
+	</Person>
+	<Person>
+		<id>3</id>
+		<vorname>Max</vorname>
+		<nachname>Mustermann</nachname>
+	</Person>
+</Personen>

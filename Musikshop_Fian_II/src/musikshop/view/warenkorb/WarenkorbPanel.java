@@ -82,9 +82,6 @@ public class WarenkorbPanel extends JPanel {
 	public void updateWKView(Warenkorb warenkorb) {
 		this.getCartItems().clear();
 		warenkorb.getWarenkorbItems().forEach(item -> this.getCartItems().add(new WarenkorbPanelItem(item)));
-		System.out.println("Aktualisiere WK Panel");
-		System.out.println("Anzahl CartItems: " + this.getCartItems().size());
-		System.out.println("Anzahl Wk Items: " + warenkorb.getWarenkorbItems().size());
 		this.getCartPanel().removeAll();
 		if(this.getCartItems().size()>0) {
 			this.getCartPanel().setLayout(new GridLayout(this.getCartItems().size(), 0));			
