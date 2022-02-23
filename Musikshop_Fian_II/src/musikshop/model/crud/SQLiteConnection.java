@@ -36,7 +36,6 @@ public class SQLiteConnection implements DBConnection {
 		String sql = "SELECT * FROM artikel";
 		ResultSet res = stm.executeQuery(sql);
 		return res;
-
 	}
 
 	@Override
