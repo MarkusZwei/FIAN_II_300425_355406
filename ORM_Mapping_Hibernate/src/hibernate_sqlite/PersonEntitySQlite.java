@@ -13,9 +13,7 @@ public class PersonEntitySQlite {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-
 	private String vorname;
-
 	private String nachname;
 
 	public int getId() {
